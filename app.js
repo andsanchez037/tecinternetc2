@@ -56,7 +56,7 @@ app.get('/practica03', (req, res) => {
 });
 
 
-const puerto = process.env.PORT || 3000;
+const puerto = process.env.PORT || 8080;
 app.listen(puerto, '0.0.0.0', () => {
     console.log(`Servidor corriendo en el puerto ${puerto}`);
 });
