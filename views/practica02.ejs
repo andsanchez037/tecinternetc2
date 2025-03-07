@@ -3,90 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-    <title>Cotización</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <title>Nodejs</title>
 </head>
+<%- include('partials/header.ejs') %>
+
+<%- include('partials/nav.ejs') %>
+
 <body class="container">
-    <%-include('partials/header.ejs')%>   
-    <%-include('partials/nav.ejs')%>   
-    <div class="container">
-        <center>
-            <h3>Practica II</h3>
-        </center>
-    </div>
-    <section class="container mt-5 d-flex justify-content-center">
+    <center>
+        <h3>Cotizacion</h3>
+    </center>
 
-        <div id="formulario" class="col-md-6">
-            <form action="cotizacion" method="post" onsubmit="return validar()" class="form-control mb-3 text-center">
-
+    <section class="formulario-container" style="padding: 20px;">
+        <div id="formulario" class="container">
+            <form action="/cotizacion" method="post" onsubmit="return validar()">
                 <div class="form-group">
-                    <h3>Cotización</h3>
-                    <label for="valor">Valor del Automovil:</label>
-                    <input type="number" name="valor" id="valor" value="<%=valor%>" class="form-control" required>
+                    <label for="valor">Valor del Automovil: </label>
+                    <input type="number" class="form-control" name="valor" id="valor" value="<%= valor %>" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="pinicial">Porcentaje inicial</label>
-                    <input type="number" name="pinicial" id="pinicial" class="form-control" value="<%=pinicial%>" required>
+                    <label for="pinicial">Porcentaje Pago Inicial: </label>
+                    <input type="number" class="form-control" name="pinicial" id="pinicial" value="<%= pinicial %>" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="plazos">Plazos:</label>
-                    <select name="plazos" id="plazos" class="form-select text-center">
-
-                        <option value="12" <%= plazos === 12 ? 'selected':''%>>12 Meses</option>                      
-                        <option value="24" <%= plazos === 24 ? 'selected':''%>>24 Meses</option>                      
-                        <option value="36" <%= plazos === 36 ? 'selected':''%>>36 Meses</option>                      
-                        <option value="48" <%= plazos === 48 ? 'selected':''%>>48 Meses</option>                      
-                        <option value="60" <%= plazos === 60 ? 'selected':''%>>60 Meses</option>      
-                        
-                        
+                    <label for="plazos">Plazos</label>
+                    <select name="plazos" id="plazos" class="form-control">
+                        <option value="12" <%= plazos === 12 ? 'selected' : '' %>>12 meses</option>
+                        <option value="24" <%= plazos === 24 ? 'selected' : '' %>>24 meses</option>
+                        <option value="36" <%= plazos === 36 ? 'selected' : '' %>>36 meses</option>
+                        <option value="48" <%= plazos === 48 ? 'selected' : '' %>>48 meses</option>
+                        <option value="60" <%= plazos === 60 ? 'selected' : '' %>>60 meses</option>
                     </select>
                 </div>
 
-                <div class="buttons" style="margin: 20px 0px;"></div>
+                <div class="buttons" style="margin: 20px 0;">
                     <button type="submit" class="btn btn-primary">Enviar</button>
                     <a href="/cotizacion" class="btn btn-secondary">Limpiar</a>
-
-                    
+                </div>
             </form>
 
-       </div>
-    </section>
-    <% if (plazos && valor && pinicial ) {%>
-        <table class="table table-striped table-bordered text-center">
-            <thead>
-                <tr>
-                    <th>Valor</th>
-                    <th>Pago inicial</th>
-                    <th>Total a Financiar</th>
-                    <th>Pago Mensual</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% 
-                    let pagoInicial = valor * (pinicial/100)
-                    let totalFin = valor - pagoInicial
-                    let pagoMensual = totalFin/plazos
-                %>
-                <tr>
-                    <td><%= valor %></td>
-                    <td><%= pagoInicial %></td>
-                    <td><%= totalFin %></td>
-                    <td><%= pagoMensual %></td>
-                </tr>
-            </tbody>
-        </table>
-        <% } %>
-    <%-include('partials/footer.ejs')%>  
-</body>
+            <section class="container">
+                <center>
+                <hr>
+                <h2>Resultados</h2>
+                <hr>
+                <table class="table">
+                    <th>
+                        <tr>
+                            <th>Valor</th>
+                            <th>Pago Inicial</th>
+                            <th>Total Financiar</th>
+                            <th>Pago Mensual</th>
+                        </tr>
+                    </th>
+                    <tbody>
+                        <%
+                        if (valor){
+                            let pagoInicial = valor * (pinicial / 100);
+                            let totalfin = valor - pagoInicial;
+                            let pagoMensual = totalfin / plazos;
+                         %>
 
+                    </tbody>    
+                    <tr>
+                        <td><%= valor %></td>
+                        <td><%= pagoInicial %></td>
+                        <td><%= totalfin %></td>
+                        <td><%= pagoMensual %></td>
+                    </tr>
+                    <% } %>
+                </table>
+                </center>
+            </section>
+        </div>
+    </section>
+
+<%- include('partials/footer.ejs') %>
+
+</body>
 <script>
-    function validar(){
+    function validar() {
         var pinicial = document.getElementById('pinicial').value;
-        if(pinicial < 0) alert("El porcentaje tiene que ser positivo")
-        if(pinicial > 100) alert("El porcentaje debe ser menor o igual a 100")
-        
+        if (pinicial < 0) {
+            alert("El porcentaje debe ser mayor a 0");
+            return false;
+        }
+        if (pinicial > 100) {
+            alert("El porcentaje debe ser menor a 100");
+            return false;
+        }
+        return true;
     }
 </script>
 </html>
