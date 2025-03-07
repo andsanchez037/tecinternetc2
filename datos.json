@@ -1,0 +1,26 @@
+[
+    {
+        "matricula": "2021030083",
+        "nombre": "Andrés Sánchez",
+        "sexo": "M",
+        "materias": ["prog.web", "Base de datos", "Ingles"]
+    },
+    {
+        "matricula": "2021030080",
+        "nombre": "Jose Lopez",
+        "sexo": "M",
+        "materias": ["prog.web", "Base de datos", "Ingles"]
+    },
+    {
+        "matricula": "2021030081",
+        "nombre": "Juan Perez",
+        "sexo": "M",
+        "materias": ["prog.web", "Base de datos", "Ingles"]
+    },
+    {
+        "matricula": "2021030082",
+        "nombre": "Maria Garcia",
+        "sexo": "F",
+        "materias": ["prog.web", "Base de datos", "Ingles"]
+    }
+]

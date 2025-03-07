@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body class="container">
+    <%- include('partials/header.ejs') %>   
+    <%- include('partials/nav.ejs') %>   
+    <div class="container">
+        <br>
+        <center>
+            <h3>Tabla de multiplicar del: <%= numero !== null ? numero : '' %></h3>
+        </center>
+    </div>
+
+    <section>
+        <div class="container mt-5 d-flex justify-content-center">
+            <div class="col-md-6">
+                <form action="p01" method="post" class="mb-3">
+
+                    <div class="form-group">
+                        <label for="numero" class="form-control mb-3 text-center">Numero</label>
+                        <input type="number" name="numero" id="numero" class="form-control" required>
+
+
+                    </div>
+
+                    <br>
+
+                    <center>
+                    <button class="btn btn-primary" type="submit">Enviar</button>
+                    <a href="/practica1" class="btn btn-secondary">Limpiar</a>
+                    </center>
+                </form>
+
+                <% if (numero !== null) { %> 
+                <table class="table table-striped table-bordered text-center">
+                    <tr>
+                        <th>Numero</th>
+                        <th>x</th>
+                        <th>Tabla</th>
+                        <th>Resultado</th>
+                    </tr>
+                    <% for (let i = 1; i < 11; i++) { %>
+                        <tr>
+                            <td><%= numero %></td>
+                            <td>x</td>
+                            <td><%= i %></td>
+                            <td><%= numero * i %></td>
+                        </tr>
+                    <% } %>
+                </table>
+
+                <% } %>
+            </div>
+        </div>
+        
+    </section>
+    <%- include('partials/footer.ejs') %>  
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body class ="container">
+    <header>
+        <%- include('partials/header.ejs') %>
+        <%- include('partials/nav.ejs') %>
+        <center>
+            <img src="/img/upsin2.png" alt="">
+            <h3><%=titulo%></h3>
+        </center>    
+         
+        <section>
+            <center>   
+            <hr>
+            <table class = "table">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nombre</th>
+                    <th>Sexo</th>
+                    <th>Materias</th>
+                </tr>
+                <% for(let i = 0; i < listado.length; i++) { %>  
+                    <tr>
+                        <td><%= listado[i].matricula %></td>
+                        <td><%= listado[i].nombre %></td>
+                        <td><%= listado[i].sexo %></td>
+                        <td><%= listado[i].materias %></td>
+                    </tr>
+                <% } %> 
+            </table>
+        </center>
+        </section>
+    </header>
+</body>
+<%- include('partials/footer.ejs') %>
+</html>
