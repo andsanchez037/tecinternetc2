@@ -56,7 +56,7 @@ app.get('/practica03', (req, res) => {
 });
 
 
-const puerto = 3000;
-app.listen(puerto, '0.0.0.0' , () => {
-    console.log("El puerto esta escuchando")
+const puerto = process.env.PORT || 3000;
+app.listen(puerto, '0.0.0.0', () => {
+    console.log(`Servidor corriendo en el puerto ${puerto}`);
 });
