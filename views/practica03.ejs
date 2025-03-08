@@ -3,20 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Node.js</title>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-</head>
+    <title>Nodejs</title>
 
-<body>
-    <%- include('partials/header.ejs') %>
-    <%- include('partials/nav.ejs') %>
-    <div class="container">
-        <center>
-            <h3>
-                Práctica03
-            </h3>
-        </center>
-    </div>
-    <%- include('partials/footer.ejs') %>
+    <style>
+        .btn-primary {
+            background-color: #04055e; 
+            border-color: #ff0000; 
+        }
+        .btn-secondary {
+            background-color: #808080;
+            border-color: #6c757d;
+        }
+    </style>
+
+</head>
+<%- include('partials/header.ejs') %>
+
+<%- include('partials/nav.ejs') %>
+
+<body class="container">
+    <center>
+        <h3>Recibo de nomina</h3>
+    </center>
+
+    <section class="formulario-container" style="padding: 20px;">
+        <div id="formulario" class="container">
+            <form action="/nomina" method="post" onsubmit="return validar()">
+                <div class="form-group">
+                    <label for="recibo">Núm. de Recibo: </label>
+                    <input type="number" class="form-control" name="recibo" id="recibo" value="<%= recibo %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre: </label>
+                    <input type="text" class="form-control" name="nombre" id="nombre" value="<%= nombre %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="puesto">Puesto</label>
+                    <select name="puesto" id="puesto" class="form-control">
+                        <option value="1" <%= puesto === 1 ? 'selected' : '' %>>Puesto 1</option>
+                        <option value="2" <%= puesto === 2 ? 'selected' : '' %>>Puesto 2</option>
+                        <option value="3" <%= puesto === 3 ? 'selected' : '' %>>Puesto 3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nivel">Nivel de empleado</label>
+                    <select name="nivel" id="nivel" class="form-control">
+                        <option value="1" <%= nivel === 1 ? 'selected' : '' %>>Nivel 1</option>
+                        <option value="2" <%= nivel === 2 ? 'selected' : '' %>>Nivel 2</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dias">Días trabajados: </label>
+                    <input type="number" class="form-control" name="dias" id="dias" value="<%= dias %>" required>
+                </div>
+
+                <div class="buttons" style="margin: 20px 0;">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+                </div>
+
+            </form>
+
+            <section class="container">
+                <center>
+                <hr>
+                <h2>Resultados</h2>
+                <hr>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cálculo de pago</th>
+                            <th>Cálculo de impuesto</th>
+                            <th>Total a pagar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultados">
+                        <%
+                        if (dias) {
+                            let pagoPorDia;
+                            if (puesto === 1) {
+                                pagoPorDia = 100;
+                            } else if (puesto === 2) {
+                                pagoPorDia = 200;
+                            } else if (puesto === 3) {
+                                pagoPorDia = 300;
+                            }
+                    
+                            let calculoPago = dias * pagoPorDia;
+                    
+                            let impuesto;
+                            if (nivel === 1) {
+                                impuesto = calculoPago * 0.05;
+                            } else if (nivel === 2) {
+                                impuesto = calculoPago * 0.03;
+                            }
+                    
+                            let totalPagar = calculoPago - impuesto;
+                        %>
+                        <tr>
+                            <td><%= calculoPago %></td>
+                            <td><%= impuesto %></td>
+                            <td><%= totalPagar %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                </center>
+            </section>
+        </div>
+
+    </section>
+
+<%- include('partials/footer.ejs') %>
+
 </body>
+<script>
+    function validar() {
+        var dias = document.getElementById('dias').value;
+        if (dias < 0) {
+            alert("Los días trabajados deben ser mayor a 0");
+            return false;
+        }
+        return true;
+    }
+
+    function limpiarFormulario() {
+        document.getElementById('recibo').value = '';
+        document.getElementById('nombre').value = '';
+        document.getElementById('puesto').value = '1';
+        document.getElementById('nivel').value = '1';
+        document.getElementById('dias').value = '';
+
+        document.getElementById('resultados').innerHTML = '';
+    }
+</script>
 </html>

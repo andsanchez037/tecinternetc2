@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <title>Nodejs</title>
+
+    <style>
+        .btn-primary {
+            background-color: #04055e; 
+            border-color: #ff0000; 
+        }
+        .btn-secondary {
+            background-color: #808080;
+            border-color: #6c757d;
+        }
+    </style>
+
 </head>
 <%- include('partials/header.ejs') %>
 
@@ -92,7 +104,7 @@
             return false;
         }
         if (pinicial > 100) {
-            alert("El porcentaje debe ser menor a 100");
+            alert("El porcentaje debe ser menor o igual a 100");
             return false;
         }
         return true;

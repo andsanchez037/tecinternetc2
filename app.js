@@ -58,6 +58,27 @@ app.post("/p01",(req,res)=>{
 
 });
 
+app.get("/nomina", (req, res) => {
+    res.render("practica03", {
+        recibo: '',
+        nombre: '',
+        puesto: '',
+        nivel: '',
+        dias: ''
+    });
+});
+
+app.post("/nomina", (req, res) => {
+    const { recibo, nombre, puesto, nivel, dias } = req.body;
+    res.render("practica03", {
+        recibo,
+        nombre,
+        puesto: parseInt(puesto),
+        nivel: parseInt(nivel),
+        dias: parseInt(dias)
+    });
+});
+
 
 
 const puerto = 3000;
