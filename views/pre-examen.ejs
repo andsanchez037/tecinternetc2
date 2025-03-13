@@ -44,18 +44,11 @@
                     </tr>
                 </thead>
                 <tbody id="resultados">
-                    <% 
-                    let totalCosto = 0;
-                    let totalCostoVenta = 0;
-                    let totalCantidad = 0;
-                    for(let i = 0; i < listado.length; i++) { 
-                        let costo = parseFloat(listado[i].costo) || 0;
-                        let costoVenta = costo * 1.15; // Costo de Venta es Costo + 15%
-                        let cantidad = parseInt(listado[i].cantidad) || 0;
-
-                        totalCosto += costo * cantidad;
-                        totalCostoVenta += costoVenta * cantidad;
-                        totalCantidad += cantidad;
+                    <% if (listado && listado.length > 0) { 
+                        for(let i = 0; i < listado.length; i++) { 
+                            let costo = parseFloat(listado[i].costo) || 0;
+                            let costoVenta = costo * 1.15;
+                            let cantidad = parseInt(listado[i].cantidad) || 0;
                     %>  
                         <tr>
                             <td><%= listado[i].id %></td>
@@ -66,24 +59,29 @@
                             <td><%= listado[i].tipo %></td>
                         </tr>
                     <% } %> 
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" class="text-center">No hay datos disponibles</td>
+                        </tr>
+                    <% } %>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Total productos</th>
-                        <th id="totalCantidad"><%= totalCantidad %></th>
+                        <th id="totalCantidad"><%= totalCantidad || 0 %></th>
                         <th></th>
                     </tr>
                     <tr>
                         <th>Total Costo</th>
-                        <th id="totalCosto"><%= totalCosto.toFixed(2) %></th>
+                        <th id="totalCosto"><%= (totalCosto || 0).toFixed(2) %></th>
                     </tr>
                     <tr>
                         <th>Total costo+15%:</th>
-                        <th id="totalCostoVenta"><%= totalCostoVenta.toFixed(2) %></th>
+                        <th id="totalCostoVenta"><%= (totalCostoVenta || 0).toFixed(2) %></th>
                     </tr>
                     <tr>
                         <th>Ganancia</th>
-                        <th id="ganancia"><%= (totalCostoVenta - totalCosto).toFixed(2) %></th>
+                        <th id="ganancia"><%= ((totalCostoVenta || 0) - (totalCosto || 0)).toFixed(2) %></th>
                     </tr>
                 </tfoot>
             </table>
@@ -93,9 +91,9 @@
 </body>
 <%- include('partials/footer.ejs') %>
 <script>
-    function limpiarFormulario() {
+    function limpiarFormulario() {  
         document.getElementById('filterForm').reset();
-        document.getElementById('resultados').innerHTML = '';
+        document.getElementById('resultados').innerHTML = '<tr><td colspan="6" class="text-center"></td></tr>';
         document.getElementById('totalCantidad').innerText = '0';
         document.getElementById('totalCosto').innerText = '0.00';
         document.getElementById('totalCostoVenta').innerText = '0.00';

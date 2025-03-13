@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
         res.render("index", { titulo: "Listado de Alumnos", listado: listado });
     });
 });
+
 app.get("/practica1", (req, res) => {
     res.render("practica01", { numero: "" });
 });
@@ -73,6 +74,14 @@ app.post("/nomina", (req, res) => {
 });
 
 app.get('/papeleria', (req, res) => {
+    let totalCantidad = 0;
+    let totalCosto = 0;
+    let totalCostoVenta = 0;
+
+    if (Object.keys(req.query).length === 0) {
+        return res.render('pre-examen', { titulo: 'Productos de Papelería', listado: [], totalCantidad, totalCosto, totalCostoVenta });
+    }
+
     fs.readFile('productos.json', (err, data) => {
         if (err) throw err;
         let productos = JSON.parse(data);
@@ -80,23 +89,32 @@ app.get('/papeleria', (req, res) => {
         if (tipo) {
             productos = productos.filter(producto => producto.tipo == tipo);
         }
-        res.render('pre-examen', { titulo: 'Productos de Papelería', listado: productos });
+        productos.forEach(producto => {
+            let costo = parseFloat(producto.costo) || 0;
+            let costoVenta = costo * 1.15;
+            let cantidad = parseInt(producto.cantidad) || 0;
+
+            totalCosto += costo * cantidad;
+            totalCostoVenta += costoVenta * cantidad;
+            totalCantidad += cantidad;
+        });
+        res.render('pre-examen', { titulo: 'Productos de Papelería', listado: productos, totalCantidad, totalCosto, totalCostoVenta });
     });
 });
 
 app.post('/papeleria', (req, res) => {
+    const { id, producto, costo, cantidad, tipo } = req.body;
+    const costoVenta = parseFloat(costo) * 1.15;
     fs.readFile('productos.json', (err, data) => {
         if (err) throw err;
         let productos = JSON.parse(data);
-        const { id, producto, costo, costoVenta, cantidad, tipo } = req.body;
-        productos.push({ id, producto, costo, costoVenta, cantidad, tipo });
+        productos.push({ id: parseInt(id), producto, costo: parseFloat(costo), costoVenta, cantidad: parseInt(cantidad), tipo: parseInt(tipo) });
         fs.writeFile('productos.json', JSON.stringify(productos, null, 2), (err) => {
             if (err) throw err;
             res.redirect('/papeleria');
         });
     });
 });
-
 
 const puerto = 3000;
 app.listen(puerto, () => {
