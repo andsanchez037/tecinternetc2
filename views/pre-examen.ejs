@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-examen 02</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body class="container">
+    <header>
+        <%- include('partials/header.ejs') %>
+        <%- include('partials/nav.ejs') %>
+        <center>
+            <h3><%= titulo %></h3>
+        </center>    
+         
+        <form id="filterForm" action="/papeleria" method="get">
+            <div class="form-group">
+                <label for="tipo">Filtrar por tipo:</label>
+                <select name="tipo" id="tipo" class="form-group">
+                    <option value="">Todos</option>
+                    <option value="1">Tipo 1</option>
+                    <option value="2">Tipo 2</option>
+                    <option value="3">Tipo 3</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+        </form>
+
+        <section>
+            <center>   
+            <hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Producto</th>
+                        <th>Costo</th>
+                        <th>Costo de venta</th>
+                        <th>Cantidad</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>
+                <tbody id="resultados">
+                    <% 
+                    let totalCosto = 0;
+                    let totalCostoVenta = 0;
+                    let totalCantidad = 0;
+                    for(let i = 0; i < listado.length; i++) { 
+                        let costo = parseFloat(listado[i].costo) || 0;
+                        let costoVenta = costo * 1.15; // Costo de Venta es Costo + 15%
+                        let cantidad = parseInt(listado[i].cantidad) || 0;
+
+                        totalCosto += costo * cantidad;
+                        totalCostoVenta += costoVenta * cantidad;
+                        totalCantidad += cantidad;
+                    %>  
+                        <tr>
+                            <td><%= listado[i].id %></td>
+                            <td><%= listado[i].producto %></td>
+                            <td><%= costo.toFixed(2) %></td>
+                            <td><%= costoVenta.toFixed(2) %></td>
+                            <td><%= cantidad %></td>
+                            <td><%= listado[i].tipo %></td>
+                        </tr>
+                    <% } %> 
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total productos</th>
+                        <th id="totalCantidad"><%= totalCantidad %></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>Total Costo</th>
+                        <th id="totalCosto"><%= totalCosto.toFixed(2) %></th>
+                    </tr>
+                    <tr>
+                        <th>Total costo+15%:</th>
+                        <th id="totalCostoVenta"><%= totalCostoVenta.toFixed(2) %></th>
+                    </tr>
+                    <tr>
+                        <th>Ganancia</th>
+                        <th id="ganancia"><%= (totalCostoVenta - totalCosto).toFixed(2) %></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </center>
+        </section>
+    </header>
+</body>
+<%- include('partials/footer.ejs') %>
+<script>
+    function limpiarFormulario() {
+        document.getElementById('filterForm').reset();
+        document.getElementById('resultados').innerHTML = '';
+        document.getElementById('totalCantidad').innerText = '0';
+        document.getElementById('totalCosto').innerText = '0.00';
+        document.getElementById('totalCostoVenta').innerText = '0.00';
+        document.getElementById('ganancia').innerText = '0.00';
+    }
+</script>
+</html>
