@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen 02</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body class="container">
+    <header>
+        <%- include('partials/header.ejs') %>
+        <%- include('partials/nav.ejs') %>
+        <center>
+            <h3><%= titulo %></h3>
+        </center>    
+        <center>
+            <h3>Listado de Alumnos</h3>
+            <br>
+            <h4>Estadística de calificaciones</h4>
+            <br>
+        </center>
+         
+        <form id="filterForm" action="/escuela" method="get">
+            <div class="form-group">
+                <label for="Nivel">Filtrar por nivel:</label>
+                <select name="Nivel" id="Nivel" class="form-group">
+                    <option value="">Todos</option>
+                    <option value="1">Primaria</option>
+                    <option value="2">Secundaria</option>
+                    <option value="3">Preparatoria</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Turno">Turno:</label>
+                <select name="Turno" id="Turno" class="form-group">
+                    <option value="">Todos</option>
+                    <option value="1">Matutino</option>
+                    <option value="2">Vespertino</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Vista">Filtrar por tipo de vista:</label>
+                <select name="Vista" id="Vista" class="form-group">
+                    <option value="1">Resumen</option>
+                    <option value="0">Detalle</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+        </form>
+
+        <section>
+            <center>   
+            <hr>
+            <% if (vista == "0") { %>
+            <% if (listado && listado.length > 0) { %>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Matrícula</th>
+                        <th>Nombre</th>
+                        <th>Nivel</th>
+                        <th>Turno</th>
+                        <th>Calificación</th>
+                    </tr>
+                </thead>
+                <tbody id="resultados">
+                    <% for(let i = 0; i < listado.length; i++) { %>  
+                        <tr>
+                            <td><%= listado[i].matricula %></td>
+                            <td><%= listado[i].nombre %></td>
+                            <td><%= listado[i].nivel == 1 ? 'Primaria' : listado[i].nivel == 2 ? 'Secundaria' : 'Preparatoria' %></td>
+                            <td><%= listado[i].turno == 1 ? 'Matutino' : 'Vespertino' %></td>
+                            <td><%= listado[i].promedio %></td>
+                        </tr>
+                    <% } %> 
+                </tbody>
+            </table>
+        
+            <% } %>
+            <% } %>
+            <% if (vista == "1") { %>
+            <tbody id="resumen">
+                <p>Total de alumnos: <%= totalAlumnos %></p>
+                <p>Promedio general: <%= promedioGeneral.toFixed(2) %></p>
+                <p>Total de alumnos con calificación <= 7: <%= totalMenorIgual7 %></p>
+                <p>Total de alumnos con calificación > 7: <%= totalMayorIgual7 %></p>
+            </tbody>
+            <% } %>
+        </center>
+        </section>
+    </header>
+</body>
+<%- include('partials/footer.ejs') %>
+<script>
+    function limpiarFormulario() {
+        window.location.href = "/escuela";
+    }
+</script>
+</html>

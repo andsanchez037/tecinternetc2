@@ -116,6 +116,35 @@ app.post('/papeleria', (req, res) => {
     });
 });
 
+app.get("/escuela", (req, res) => {
+    let totalAlumnos = 0;
+    let promedioGeneral = 0;
+    let totalMenorIgual7 = 0;
+    let totalMayorIgual7 = 0;
+
+    fs.readFile('alumnos2.json', (err, data) => {
+        if (err) throw err;
+        let alumnos = JSON.parse(data);
+        const nivel = req.query.Nivel;
+        const turno = req.query.Turno;
+        const vista = req.query.Vista;
+
+        if (nivel) {
+            alumnos = alumnos.filter(alumno => alumno.nivel == nivel);
+        }
+        if (turno) {
+            alumnos = alumnos.filter(alumno => alumno.turno == turno);
+        }
+
+        totalAlumnos = alumnos.length;
+        promedioGeneral = totalAlumnos > 0 ? alumnos.reduce((acc, alumno) => acc + alumno.promedio, 0) / totalAlumnos : 0;
+        totalMenorIgual7 = alumnos.filter(alumno => alumno.promedio <= 7).length;
+        totalMayorIgual7 = alumnos.filter(alumno => alumno.promedio > 7).length;
+
+        res.render('examenc2', { titulo: vista == "0" ? 'Detalle de Alumnos' : 'Resumen de Alumnos', listado: alumnos, totalAlumnos, promedioGeneral, totalMenorIgual7, totalMayorIgual7, vista });
+    });
+});
+
 const puerto = 3000;
 app.listen(puerto, () => {
     console.log("El puerto te esta escuchando");
